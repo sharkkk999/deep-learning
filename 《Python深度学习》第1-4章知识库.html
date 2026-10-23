@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>《Python深度学习：模型、方法与实现》第1~4章 知识库</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='2' y='2' width='28' height='28' rx='6' fill='%230a0e17'/><circle cx='10' cy='12' r='3' fill='%235eead4'/><circle cx='22' cy='11' r='3' fill='%23a78bfa'/><circle cx='16' cy='22' r='3' fill='%23fbbf24'/><path d='M11 15 L15 20 M12.8 11.8 L20 11.6 M18.8 13.2 L17.6 19.6' stroke='%23e8ecf5' stroke-width='1.4' fill='none'/></svg>">
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#0a0e17; --bg2:#0e1420; --surface:#121a2a; --surface2:#182238;
+  --line:#223049; --line2:#2c3c5c;
+  --ink:#e8ecf5; --ink2:#aab4cc; --ink3:#74809e;
+  --cy:#5eead4; --vi:#a78bfa; --am:#fbbf24; --rd:#fb7185;
+  --cy-dim:rgba(94,234,212,.12); --vi-dim:rgba(167,139,250,.12); --am-dim:rgba(251,191,36,.10);
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:"Noto Sans SC",-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;font-size:16px;-webkit-font-smoothing:antialiased}
+::selection{background:var(--cy);color:#06241f}
+a{color:var(--cy)}
+:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E")}
+.topbar{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:14px;padding:12px 20px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.topbar .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;white-space:nowrap}
+.topbar .brand svg{width:26px;height:26px}
+.topbar .nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.topbar .nav button{background:transparent;border:1px solid var(--line);color:var(--ink2);border-radius:999px;padding:5px 13px;font-size:13px;cursor:pointer;font-family:var(--sans);transition:.18s}
+.topbar .nav button:hover{border-color:var(--cy);color:var(--cy)}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ink3);border:1px solid var(--line);padding:2px 9px;border-radius:999px}
+.wrap{position:relative;z-index:1;display:grid;grid-template-columns:280px minmax(0,1fr);gap:34px;max-width:1180px;margin:0 auto;padding:34px 24px 120px}
+.sidebar{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;padding-right:6px}
+.sidebar .sgroup{font-size:11px;letter-spacing:.08em;color:var(--ink3);text-transform:uppercase;margin:18px 0 8px}
+.sidebar a{display:block;color:var(--ink2);text-decoration:none;font-size:13.5px;padding:5px 10px;border-radius:7px;border-left:2px solid transparent}
+.sidebar a:hover{color:var(--ink);background:var(--surface)}
+.sidebar a.active{color:var(--cy);border-left-color:var(--cy);background:var(--cy-dim)}
+.sidebar a.sub{padding-left:24px;font-size:12.5px;color:var(--ink3)}
+.doc{min-width:0;max-width:760px}
+.hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:20px;padding:44px 40px 40px;margin-bottom:26px;background:radial-gradient(120% 90% at 10% 0%,#131f38 0%,var(--bg2) 55%,var(--bg) 100%)}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.9}
+.hero .inner{position:relative;z-index:2}
+.hero .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--cy);letter-spacing:.14em;margin-bottom:14px;border:1px solid var(--cy-dim);background:var(--cy-dim);padding:4px 12px;border-radius:999px}
+.hero h1{font-size:clamp(26px,4.4vw,40px);font-weight:900;margin:0 0 12px;line-height:1.2;text-wrap:balance}
+.hero h1 .grad{background:linear-gradient(100deg,var(--cy),var(--vi));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{color:var(--ink2);font-size:16px;max-width:60ch;margin:0 0 20px}
+.hero .meta{display:flex;flex-wrap:wrap;gap:10px}
+.hero .meta .chip{border-color:var(--line2)}
+.chapter{margin:0 0 46px}
+.chapter-head{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--line2);padding-bottom:12px;margin-bottom:22px}
+.chapter-num{font-family:var(--mono);font-size:14px;color:var(--cy)}
+.chapter-head h2{font-size:26px;font-weight:800;margin:0;text-wrap:balance}
+.chapter-head .scope{color:var(--ink3);font-size:13px;margin-left:auto;white-space:nowrap}
+h3.topic{font-size:19px;font-weight:700;margin:34px 0 12px;display:flex;align-items:center;gap:10px}
+h3.topic::before{content:"";width:8px;height:22px;border-radius:3px;background:linear-gradient(180deg,var(--cy),var(--vi))}
+h4{font-size:16px;font-weight:600;margin:20px 0 8px;color:#dfe6f5}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 12px;padding-left:22px}
+li{margin:4px 0}
+strong{color:#fff;font-weight:600}
+.muted{color:var(--ink2)} .muted2{color:var(--ink3)}
+.formula{border-left:3px solid var(--cy);background:var(--surface);padding:14px 18px;margin:14px 0;border-radius:0 10px 10px 0;overflow-x:auto}
+.formula .flabel{font-size:12px;color:var(--ink3);margin-bottom:6px;letter-spacing:.04em}
+.formula .katex{font-size:1.05em}
+.inline-katex{font-size:1em}
+.tag{font-family:var(--mono);font-size:12px;color:var(--vi);background:var(--vi-dim);padding:1px 8px;border-radius:6px}
+pre.code{background:#0b0f1a;border:1px solid var(--line);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:12px 0;font-size:13.5px;line-height:1.6}
+pre.code code{font-family:var(--mono)}
+pre.code .c{color:var(--ink3)} pre.code .k{color:#7dd3fc} pre.code .f{color:#fde68a}
+pre.code .s{color:#a5d6a7} pre.code .n{color:#f9a8d4} pre.code .o{color:#c4b5fd} pre.code .r{color:var(--cy)}
+.table-wrap{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+caption{text-align:left;padding:10px 14px;font-size:12px;color:var(--ink3)}
+th{background:var(--surface2);text-align:left;padding:9px 12px;font-weight:600;color:#dfe6f5;border-bottom:1px solid var(--line2);white-space:nowrap}
+td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td .katex{font-size:1em}
+td b,th b{color:var(--cy)}
+.example{border:1px solid var(--line);border-left:4px solid var(--am);border-radius:12px;background:linear-gradient(180deg,color-mix(in srgb,var(--am-dim) 55%,var(--surface)),var(--surface));padding:16px 18px;margin:18px 0}
+.example .ex-head{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--am);margin-bottom:10px;font-size:14px}
+.example .ex-body p{margin:0 0 8px}
+.example .hint{color:var(--ink2);font-size:14px}
+details.solution{border-top:1px dashed var(--line2);margin-top:12px;padding-top:10px}
+details.solution summary{cursor:pointer;color:var(--cy);font-weight:600;font-size:14px;outline:none}
+details.solution .sol-body{margin-top:10px;border:1px solid var(--line);background:#0e1726;border-radius:10px;padding:14px 16px}
+details.solution .katex{font-size:1em}
+details.solution .answer-tag{color:var(--am);font-weight:700}
+details.solution pre.code{margin:8px 0}
+.interact{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:18px 20px;margin:16px 0}
+.interact .i-title{font-weight:700;font-size:15px;margin-bottom:6px;color:#fff}
+.interact .i-desc{color:var(--ink2);font-size:14px;margin-bottom:14px}
+.slider-row{display:flex;align-items:center;gap:12px;margin:8px 0;flex-wrap:wrap}
+.slider-row label{width:150px;font-size:13px;color:var(--ink2)}
+.slider-row input[type=number]{background:#0b0f1a;border:1px solid var(--line2);color:var(--ink);border-radius:8px;padding:7px 10px;font-family:var(--mono);font-size:14px;width:90px}
+.slider-row input[type=number]:focus{border-color:var(--cy);outline:none}
+.btn{border:1px solid var(--cy);background:var(--cy-dim);color:var(--cy);border-radius:9px;padding:7px 16px;font-size:14px;cursor:pointer;font-family:var(--sans)}
+.btn:hover{background:var(--cy);color:#06241f}
+.btn.ghost{border-color:var(--line2);background:transparent;color:var(--ink2)}
+.btn._act{border-color:var(--cy);background:var(--cy);color:#06241f}
+.result-box{border:1px dashed var(--cy);background:var(--cy-dim);border-radius:10px;padding:12px 14px;margin-top:14px;font-size:14px}
+.result-box .big{font-family:var(--mono);font-size:22px;color:var(--cy);font-weight:700}
+.efig{width:100%;height:320px;margin:10px 0}
+.fdb{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:10px;font-size:14px;display:none}
+.fdb.ok{border-color:var(--cy);background:var(--cy-dim);color:#bdf3e8;display:block}
+.fdb.bad{border-color:var(--rd);background:rgba(251,113,133,.1);color:#fecdd3;display:block}
+.quiz-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+@media(max-width:560px){.quiz-grid{grid-template-columns:1fr}}
+.callout{border-radius:12px;padding:14px 16px;margin:14px 0;font-size:14.5px;border:1px solid}
+.callout.warn{background:var(--am-dim);border-color:rgba(251,191,36,.25);color:#fde68a}
+.callout.info{background:var(--vi-dim);border-color:rgba(167,139,250,.25);color:#ddd6fe}
+.callout .co-t{font-weight:700;margin-bottom:4px}
+.summary-box{border:1px solid var(--line);border-radius:12px;background:var(--surface2);padding:16px 18px;margin:18px 0}
+.summary-box .sb-t{font-weight:700;color:var(--cy);margin-bottom:8px}
+@media(max-width:960px){.wrap{grid-template-columns:1fr;padding:20px 16px 100px}.sidebar{display:none}.hero{padding:34px 22px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x='2' y='2' width='28' height='28' rx='6' fill='none' stroke='%23223049'/><circle cx='10' cy='12' r='3' fill='%235eead4'/><circle cx='22' cy='11' r='3' fill='%23a78bfa'/><circle cx='16' cy='22' r='3' fill='%23fbbf24'/><path d='M11 15 L15 20 M12.8 11.8 L20 11.6 M18.8 13.2 L17.6 19.6' stroke='%23e8ecf5' stroke-width='1.4' fill='none'/></svg>
+    <span>《Python深度学习》知识库</span>
+  </div>
+  <div class="nav">
+    <span class="chip">第1~4章 · 伊凡·瓦西列夫</span>
+    <button id="btn-top">回到顶部</button>
+  </div>
+</header>
+
+<nav class="wrap" aria-label="章节导航">
+  <aside class="sidebar">
+    <div class="sgroup">目录</div>
+    <a href="#ch1" class="active">第1章 · 神经网络的具体细节</a>
+    <a href="#s1-1" class="sub">1.1 数学基础</a>
+    <a href="#s1-2" class="sub">1.2 神经网络介绍</a>
+    <a href="#s1-3" class="sub">1.3 训练神经网络</a>
+    <a href="#s1-ex" class="sub">例题 1</a>
+    <a href="#ch2">第2章 · 理解卷积网络</a>
+    <a href="#s2-1" class="sub">2.1 理解 CNN</a>
+    <a href="#s2-2" class="sub">2.2 迁移学习</a>
+    <a href="#s2-ex" class="sub">例题 2</a>
+    <a href="#ch3">第3章 · 高级卷积网络</a>
+    <a href="#s3-1" class="sub">3.1 AlexNet / VGG</a>
+    <a href="#s3-2" class="sub">3.2 ResNet / Inception</a>
+    <a href="#s3-3" class="sub">3.3 MobileNet / DenseNet</a>
+    <a href="#s3-4" class="sub">3.4 NAS / 胶囊网络</a>
+    <a href="#s3-ex" class="sub">例题 3</a>
+    <a href="#ch4">第4章 · 对象检测与图像分割</a>
+    <a href="#s4-1" class="sub">4.1 对象检测</a>
+    <a href="#s4-2" class="sub">4.2 YOLO v3</a>
+    <a href="#s4-3" class="sub">4.3 Faster R-CNN</a>
+    <a href="#s4-4" class="sub">4.4 图像分割</a>
+    <a href="#s4-ex" class="sub">例题 4</a>
+    <a href="#quiz">综合自测</a>
+  </aside>
+
+  <main class="doc">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" aria-label="封面">
+      <canvas id="nncanvas" aria-hidden="true"></canvas>
+      <div class="inner">
+        <div class="kicker">神经学习课程复习 · 依据真实目录</div>
+        <h1>《Python深度学习》<br><span class="grad">第 1 ~ 4 章知识库</span></h1>
+        <p class="lead">依据《Python深度学习：模型、方法与实现》（伊凡·瓦西列夫著）真实目录整理。覆盖神经网络具体细节 → 理解卷积网络 → 高级卷积网络 → 对象检测与图像分割。每个知识点配公式、PyTorch 代码与带详解的例题，可交互自测。</p>
+        <div class="meta">
+          <span class="chip">Advanced Deep Learning with Python</span>
+          <span class="chip">伊凡·瓦西列夫 著</span>
+          <span class="chip">4 章 · 例题 · 交互自测</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 第 1 章 ===== -->
+    <section class="chapter" id="ch1">
+      <div class="chapter-head">
+        <span class="chapter-num">Chapter 01</span>
+        <h2>神经网络的具体细节</h2>
+        <span class="scope">第一部分 · 核心概念</span>
+      </div>
+
+      <div class="summary-box"><div class="sb-t">本章主线</div>
+        全书地基：先用<strong>线性代数、概率、微分学</strong>三件数学工具武装自己，再认识<strong>神经元 → 层 → 网络 → 激活函数 → 通用逼近定理</strong>，最后掌握如何<strong>训练</strong>它（梯度下降、代价函数、反向传播、权重初始化、SGD 改进）。</div>
+
+      <h3 class="topic" id="s1-1">1.1 神经网络的数学基础</h3>
+
+      <h4>① 线性代数</h4>
+      <p>神经网络处理的是<strong>张量（Tensor）</strong>——多维数组。标量是 0 阶、向量是 1 阶、矩阵是 2 阶，图像是 3 阶（通道+高+宽）。核心运算：</p>
+      <div class="formula"><div class="flabel">矩阵乘法（全连接层的本质）与转置</div>
+      $$ (AB)_{ij}=\sum_k A_{ik}B_{kj},\qquad (A^\top)_{ij}=A_{ji},\qquad a\cdot b=\sum_i a_i b_i $$
+      </div>
+      <p class="muted">一个全连接层 <span class="inline-katex">$y=Wx+b$</span> 就是一次矩阵乘法加偏置——理解维度匹配是读懂网络的关键。</p>
+
+      <h4>② 概率</h4>
+      <p>机器学习与不确定性打交道：<strong>随机变量</strong>、<strong>概率分布</strong>、<strong>条件概率</strong>。最核心的是贝叶斯定理：</p>
+      <div class="formula"><div class="flabel">贝叶斯定理与期望</div>
+      $$ P(A\mid B)=\frac{P(B\mid A)P(A)}{P(B)},\qquad \mathbb{E}[X]=\sum_x x\,P(x) $$
+      </div>
+      <p>分类任务输出的是<strong>概率分布</strong>（softmax 归一化），代价函数常用<strong>交叉熵</strong>衡量分布差异。</p>
+
+      <h4>③ 微分学</h4>
+      <p>训练的本质是<strong>求导并沿负梯度更新</strong>。多变量函数的"导数"是<strong>梯度</strong>（各偏导组成的向量），指向函数上升最快的方向。链式法则把求导逐层串起来：</p>
+      <div class="formula"><div class="flabel">梯度、偏导与链式法则</div>
+      $$ \nabla f=\left(\frac{\partial f}{\partial x_1},\dots,\frac{\partial f}{\partial x_n}\right),\qquad \frac{dz}{dx}=\frac{dz}{dy}\cdot\frac{dy}{dx} $$
+      </div>
+      <p>反向传播正是<strong>链式法则的高效实现</strong>——先有数学，才有算法。</p>
+
+      <h3 class="topic" id="s1-2">1.2 神经网络的简单介绍</h3>
+
+      <h4>神经元</h4>
+      <p>最小计算单元：对输入加权求和，过激活函数后输出。</p>
+      <div class="formula"><div class="flabel">神经元</div>
+      $$ z=\sum_i w_i x_i+b,\qquad a=\phi(z) $$
+      </div>
+
+      <h4>层的运算</h4>
+      <p>把多个神经元组织成<strong>全连接层（Dense）</strong>：一次矩阵乘法 <span class="inline-katex">$z=Wx+b$</span> 同时算所有神经元。</p>
+
+      <h4>神经网络</h4>
+      <p>多层全连接堆叠 = 深度网络。每一层做「线性变换 + 非线性激活」，层数越多能表达的函数越复杂。</p>
+
+      <h4>激活函数</h4>
+      <p>引入<strong>非线性</strong>，否则多层等价于单层线性。四种常用：</p>
+      <div class="table-wrap"><table>
+        <caption>常用激活函数（1.2.4）</caption>
+        <thead><tr><th style="width:14%">函数</th><th style="width:34%">公式</th><th>特点</th></tr></thead>
+        <tbody>
+          <tr><td><b>Sigmoid</b></td><td>$\sigma(z)=\frac{1}{1+e^{-z}}$</td><td>输出∈(0,1)；两端梯度消失</td></tr>
+          <tr><td><b>Tanh</b></td><td>$\tanh(z)=\frac{e^{z}-e^{-z}}{e^{z}+e^{-z}}$</td><td>输出∈(-1,1)，零中心</td></tr>
+          <tr><td><b>ReLU</b></td><td>$\mathrm{ReLU}(z)=\max(0,z)$</td><td>正区梯度恒 1，隐藏层默认</td></tr>
+          <tr><td><b>Softmax</b></td><td>$\mathrm{softmax}_i=\frac{e^{z_i}}{\sum_j e^{z_j}}$</td><td>多分类输出概率</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="interact">
+        <div class="i-title">交互 1.1 · 激活函数曲线</div>
+        <div class="i-desc">选择函数观察输出范围、零中心性与梯度特征。</div>
+        <div class="slider-row"><label>选择函数</label>
+          <button class="btn" data-act="sigmoid">Sigmoid</button>
+          <button class="btn ghost" data-act="tanh">Tanh</button>
+          <button class="btn ghost" data-act="relu">ReLU</button>
+          <button class="btn ghost" data-act="leaky">Leaky ReLU</button>
+        </div>
+        <div class="efig" id="act-chart"></div>
+        <p class="muted2" style="font-size:13px" id="act-note"></p>
+      </div>
+
+      <h4>通用逼近定理</h4>
+      <p>一个<strong>足够宽</strong>的单隐藏层前馈网络，可以以任意精度逼近任意连续函数。它保证了"神经网络表达能力足够"——但它<strong>没有</strong>告诉我们怎么训练、要多少参数、能否泛化。</p>
+
+      <h3 class="topic" id="s1-3">1.3 训练神经网络</h3>
+
+      <h4>① 梯度下降</h4>
+      <p>沿负梯度方向迭代更新参数，最小化代价：</p>
+      <div class="formula"><div class="flabel">梯度下降更新</div>
+      $$ W \leftarrow W-\eta\,\nabla_W L,\qquad \eta\ \text{学习率} $$
+      </div>
+      <p>三种变体按每次用多少数据：<strong>批量梯度下降</strong>（全量，慢但稳）、<strong>随机梯度下降 SGD</strong>（每样本一次，快但抖）、<strong>小批量</strong>（折中，实践标准）。</p>
+
+      <h4>② 代价函数（损失函数）</h4>
+      <div class="formula"><div class="flabel">均方误差（回归）/ 交叉熵（分类）</div>
+      $$ L_{\mathrm{MSE}}=\frac1N\sum_i(y_i-\hat y_i)^2,\qquad L_{\mathrm{CE}}=-\sum_i y_i\log\hat y_i $$
+      </div>
+
+      <h4>③ 反向传播</h4>
+      <p>用链式法则，从输出层向输入层<strong>逐层累积</strong>每个参数的梯度。这是训练效率的关键。</p>
+      <div class="formula"><div class="flabel">两层网络的反向传播（链式）</div>
+      $$ \frac{\partial L}{\partial W^{(1)}}=\frac{\partial L}{\partial \hat y}\cdot\frac{\partial \hat y}{\partial a^{(1)}}\cdot\frac{\partial a^{(1)}}{\partial z^{(1)}}\cdot\frac{\partial z^{(1)}}{\partial W^{(1)}} $$
+      </div>
+
+      <h4>④ 权重初始化</h4>
+      <p>权重太大会饱和、太小信号消失。好的初始化让各层输入输出的<strong>方差大致稳定</strong>：</p>
+      <div class="formula"><div class="flabel">Xavier / He 初始化</div>
+      $$ \text{Xavier:}\;w\sim\mathcal N\!\left(0,\sqrt{\tfrac{1}{n_{\text{in}}}}\right)\qquad \text{He:}\;w\sim\mathcal N\!\left(0,\sqrt{\tfrac{2}{n_{\text{in}}}}\right) $$
+      </div>
+      <p>He 专为 ReLU 设计（因为 ReLU 把一半梯度置零）。</p>
+
+      <h4>⑤ SGD 的改进</h4>
+      <div class="table-wrap"><table>
+        <thead><tr><th style="width:16%">方法</th><th style="width:44%">思想</th><th>作用</th></tr></thead>
+        <tbody>
+          <tr><td><b>动量 Momentum</b></td><td>$v\leftarrow\gamma v+\eta g$，$W\leftarrow W-v$</td><td>累积历史梯度，减少震荡</td></tr>
+          <tr><td><b>RMSProp</b></td><td>按梯度平方的滑动平均缩放学习率</td><td>每参数自适应步长</td></tr>
+          <tr><td><b>Adam</b></td><td>动量 + RMSProp 结合</td><td>收敛快、实践首选</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 class="topic" id="s1-ex">例题 1</h3>
+
+      <div class="example">
+        <div class="ex-head">例题 1A · 手算前向 + 反向</div>
+        <div class="ex-body">
+          <p><span class="hint">一个神经元：输入 <span class="inline-katex">$x=(1,2)$</span>，权重 <span class="inline-katex">$w=(0.5,-1)$</span>，<span class="inline-katex">$b=0$</span>，激活 ReLU，真实标签 <span class="inline-katex">$y=1$</span>，MSE 损失。求输出、损失、对 <span class="inline-katex">$w_1$</span> 的梯度（<span class="inline-katex">$\eta=0.1$</span>）并更新。</span></p>
+        </div>
+        <details class="solution"><summary>查看详解</summary><div class="sol-body">
+          <p><strong>① 前向</strong>：</p>
+          <div class="formula">$$ z=0.5\cdot1+(-1)\cdot2+0=-1.5\;\Rightarrow\;\hat y=\mathrm{ReLU}(-1.5)=0 $$
+          </div>
+          <p><strong>② 损失</strong>：<span class="inline-katex">$L=(0-1)^2=1$</span></p>
+          <p><strong>③ 梯度</strong>（链式法则）：</p>
+          <div class="formula">$$ \frac{\partial L}{\partial w_1}=2(\hat y-y)\cdot\underbrace{\mathbb 1[z&gt;0]}_{0}\cdot x_1=2(0-1)\cdot0\cdot1=0 $$
+          </div>
+          <p><span class="inline-katex">$z=-1.5&lt;0$</span>，ReLU 梯度为 0，故 <span class="inline-katex">$w_1^{\text{new}}=0.5$</span> 不变。</p>
+          <p><span class="answer-tag">答案：输出 0，损失 1，梯度 0，w₁ 保持 0.5</span></p>
+          <p class="muted2">这就是"ReLU 死亡"：净输入长期为负时神经元梯度恒 0、永不更新。是 Leaky ReLU 存在的原因。</p>
+        </div></details>
+      </div>
+
+      <div class="example">
+        <div class="ex-head">例题 1B · 矩阵乘法维度</div>
+        <div class="ex-body">
+          <p><span class="hint">输入批量 <span class="inline-katex">$X$</span> 形状 <span class="inline-katex">$(32, 784)$</span>，第一层权重 <span class="inline-katex">$W$</span> 形状 <span class="inline-katex">$(784,256)$</span>，偏置 <span class="inline-katex">$(256,)$</span>。求输出 <span class="inline-katex">$XW$</span> 的形状。</span></p>
+        </div>
+        <details class="solution"><summary>查看详解</summary><div class="sol-body">
+          <p>矩阵乘法要求 <span class="inline-katex">$X$</span> 的列 = <span class="inline-katex">$W$</span> 的行（均为 784），输出形状 = <span class="inline-katex">$(\text{X 行},\ \text{W 列})=(32,256)$</span>。</p>
+          <p><span class="answer-tag">答案：(32, 256)</span></p>
+          <p class="muted2">记忆：<code>输出形状 = (批量数, 该层输出维度)</code>。批量 32 个样本各变成长度 256 的特征。</p>
+        </div></details>
+      </div>
+    </section>
+
+    <!-- ===== 第 2 章 ===== -->
+    <section class="chapter" id="ch2">
+      <div class="chapter-head">
+        <span class="chapter-num">Chapter 02</span>
+        <h2>理解卷积网络</h2>
+        <span class="scope">第二部分 · 计算机视觉</span>
+      </div>
+
+      <div class="summary-box"><div class="sb-t">本章主线</div>
+        认识卷积网络（CNN）为何适合图像：掌握<strong>卷积运算与各种卷积类型</strong>、如何<strong>提高效率</strong>、怎样<strong>可视化</strong>和<strong>正则化</strong> CNN，最后学会用<strong>迁移学习</strong>在有限数据上做图像分类。</div>
+
+      <h3 class="topic" id="s2-1">2.1 理解 CNN</h3>
+
+      <h4>卷积运算</h4>
+      <p>卷积核在特征图上<strong>滑动</strong>，对窗口内像素加权求和。三大特性：<strong>局部连接、权重共享、平移不变</strong>，参数远少于全连接。</p>
+      <div class="formula"><div class="flabel">二维卷积（多通道：核形状 = C<sub>in</sub>×k×k，每核输出 1 通道）</div>
+      $$ S(i,j)=\sum_m\sum_n I(i+m,j+n)\,K(m,n),\qquad \text{核数}=C_{\text{out}} $$
+      </div>
+
+      <h4>padding、stride 与输出尺寸</h4>
+      <div class="formula"><div class="flabel">输出尺寸公式（考试必背）</div>
+      $$ H_{\text{out}}=\left\lfloor\frac{H_{\text{in}}+2p-k}{s}\right\rfloor+1 $$
+      </div>
+      <p>padding 补 0 控尺寸、保边缘；stride 步长控制下采样。<span class="inline-katex">$s=1$</span> 且 <span class="inline-katex">$p=(k-1)/2$</span> 时尺寸不变。</p>
+
+      <h4>卷积的类型</h4>
+      <div class="table-wrap"><table>
+        <caption>卷积类型（2.1.1）</caption>
+        <thead><tr><th style="width:18%">类型</th><th style="width:42%">做法</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td><b>标准卷积</b></td><td>核在图上滑动加权求和</td><td>基础特征提取</td></tr>
+          <tr><td><b>1×1 卷积</b></td><td>1×1 核，通道加权组合</td><td>改变通道数、降维/升维</td></tr>
+          <tr><td><b>扩张卷积</b></td><td>核元素间插入空洞（dilation）</td><td>不增参数扩大感受野</td></tr>
+          <tr><td><b>转置卷积</b></td><td>卷积的"逆"，由小放大</td><td>上采样（分割、生成）</td></tr>
+          <tr><td><b>深度可分离卷积</b></td><td>逐通道卷积 + 1×1 逐点卷积</td><td>大幅减少参数（MobileNet）</td></tr>
+        </tbody>
+      </table></div>
+
+      <h4>提高 CNN 的效率</h4>
+      <ul>
+        <li><strong>池化</strong>：最大/平均池化压缩尺寸，无参数。</li>
+        <li><strong>小卷积核堆叠</strong>：两个 3×3 ≈ 一个 5×5 的感受野，但参数更少、非线性更多。</li>
+        <li><strong>1×1 卷积降通道</strong>：在 3×3 前先降维（瓶颈结构），减少计算量。</li>
+        <li><strong>深度可分离卷积</strong>：把标准卷积拆成两步，计算量约为原来的 1/9。</li>
+      </ul>
+
+      <h4>可视化 CNN</h4>
+      <p>通过<strong>特征图可视化</strong>观察网络学到了什么：浅层检测边缘/纹理，中层组合局部图案，深层识别部件/语义。常用 Grad-CAM 看"网络关注图像哪里"。</p>
+
+      <h4>CNN 正则化</h4>
+      <ul>
+        <li><strong>Dropout</strong>：训练随机丢弃神经元，减少过拟合。</li>
+        <li><strong>Weight Decay（L2）</strong>：惩罚大权重。</li>
+        <li><strong>数据增强</strong>：翻转、裁剪、旋转，扩充有效样本。</li>
+      </ul>
+
+      <div class="interact" id="conv-play">
+        <div class="i-title">交互 2.1 · 卷积层参数量计算器</div>
+        <div class="i-desc">参数量 = C<sub>in</sub> × k × k × C<sub>out</sub>（可加偏置 C<sub>out</sub>）。与空间尺寸无关。</div>
+        <div class="slider-row"><label>输入通道 C<sub>in</sub></label><input type="number" id="c-cin" value="5" min="1"></div>
+        <div class="slider-row"><label>核大小 k（方）</label><input type="number" id="c-k" value="3" min="1"></div>
+        <div class="slider-row"><label>输出通道 C<sub>out</sub></label><input type="number" id="c-cout" value="12" min="1"></div>
+        <div class="result-box" id="conv-res" style="display:none">参数量（不含偏置） = <span id="c-no" class="big"></span><br>含偏置 = <span id="c-yes" class="big"></span></div>
+      </div>
+
+      <h3 class="topic" id="s2-2">2.2 迁移学习</h3>
+      <p><strong>迁移学习</strong>：用在大数据集（如 ImageNet）上预训练好的模型，迁移到自己的小任务。省时省力，是实战利器。两种用法：</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th style="width:20%">方式</th><th style="width:44%">做法</th><th>适用场景</th></tr></thead>
+        <tbody>
+          <tr><td><b>特征提取</b></td><td>冻结预训练权重，只用它提特征，替换分类头重新训练</td><td>数据少、任务相近</td></tr>
+          <tr><td><b>微调（Fine-tune）</b></td><td>解冻部分/全部层，用较小学习率继续训练</td><td>数据较多、任务略不同</td></tr>
+        </tbody>
+      </table></div>
+
+      <pre class="code"><code><span class="c"># PyTorch 迁移学习：微调 ResNet 前部 + 换分类头</span>
+import torchvision.models <span class="k">as</span> models
+model = models.resnet18(pretrained=True)
+<span class="k">for</span> param <span class="k">in</span> model.parameters():
+    param.requires_grad = False          <span class="c"># 先冻结全部</span>
+model.fc = nn.Linear(512, <span class="n">10</span>)        <span class="c"># 替换全连接为 10 类</span>
+<span class="c"># 只训练分类头：</span>
+opt = torch.optim.Adam(model.fc.parameters(), lr=<span class="n">0.001</span>)</code></pre>
+
+      <div class="callout info"><div class="co-t">为什么有效</div>低层学到的边缘、纹理等特征是通用的，几乎对所有视觉任务都有用，所以可以整体搬过来。</div>
+
+      <h3 class="topic" id="s2-ex">例题 2</h3>
+
+      <div class="example">
+        <div class="ex-head">例题 2A · 卷积参数量</div>
+        <div class="ex-body">
+          <p><span class="hint">输入 <span class="inline-katex">$10\times10\times5$</span>，用 <span class="inline-katex">$3\times3$</span> 卷积核，输出 <span class="inline-katex">$10\times10\times12$</span>（尺寸不变说明有 padding）。求该层参数量。</span></p>
+        </div>
+        <details class="solution"><summary>查看详解</summary><div class="sol-body">
+          <p><span class="inline-katex">$C_{\text{in}}=5$</span>，<span class="inline-katex">$C_{\text{out}}=12$</span>，核 <span class="inline-katex">$3\times3$</span>：</p>
+          <div class="formula">$$ \text{Params}=C_{\text{in}}\cdot k^2\cdot C_{\text{out}}=5\times9\times12=540 $$
+          </div>
+          <p>含偏置再加 12：<span class="inline-katex">$540+12=552$</span>。padding 不影响参数量，空间尺寸与参数量无关。</p>
+          <p><span class="answer-tag">答案：540（含偏置 552）</span></p>
+        </div></details>
+      </div>
+
+      <div class="example">
+        <div class="ex-head">例题 2B · 输出尺寸</div>
+        <div class="ex-body">
+          <p><span class="hint">输入 <span class="inline-katex">$32\times32$</span>、核 <span class="inline-katex">$5\times5$</span>、padding=0、stride=1，求输出尺寸。</span></p>
+        </div>
+        <details class="solution"><summary>查看详解</summary><div class="sol-body">
+          <div class="formula">$$ H_{\text{out}}=\left\lfloor\frac{32-5}{1}\right\rfloor+1=28 $$
+          </div>
+          <p><span class="answer-tag">答案：28×28</span></p>
+          <p class="muted2">无 padding 时每次卷积让尺寸缩小 <span class="inline-katex">$k-1$</span>：5×5 核缩 4 → 28。</p>
+        </div></details>
+      </div>
+    </section>
+
+    <!-- ===== 第 3 章 ===== -->
+    <section class="chapter" id="ch3">
+      <div class="chapter-head">
+        <span class="chapter-num">Chapter 03</span>
+        <h2>高级卷积网络</h2>
+        <span class="scope">第二部分 · 计算机视觉</span>
+      </div>
+
+      <div class="summary-box"><div class="sb-t">本章主线</div>
+        沿着 CNN 演进路线认识代表性架构：<strong>AlexNet（开创）→ VGG（更规整）→ ResNet（残差）→ Inception（多尺度）→ MobileNet（轻量）→ DenseNet（密集）</strong>，再了解<strong>神经架构搜索</strong>与<strong>胶囊网络</strong>两条新方向。重点是各自"解决什么问题、核心机制是什么"。</div>
+
+      <h3 class="topic" id="s3-1">3.1 AlexNet 与 VGG</h3>
+
+      <h4>AlexNet（2012）</h4>
+      <p>ImageNet 竞赛夺冠，点燃深度学习复兴。关键创新：<strong>ReLU 激活</strong>（快、缓解梯度消失）、<strong>Dropout</strong>、<strong>数据增强</strong>、两块 GPU 并行训练。结构：5 个卷积层 + 3 个全连接层，输出 1000 类。</p>
+
+      <h4>VGG</h4>
+      <p>把网络做<strong>更深更规整</strong>：统一用小 <span class="inline-katex">$3\times3$</span> 卷积。核心洞察——<strong>两个 3×3 堆叠 ≈ 一个 5×5</strong> 的感受野，但参数更少、非线性更多。</p>
+      <div class="formula"><div class="flabel">感受野等价</div>
+      $$ 2\times(3\times3)\;\text{感受野}=5\times5,\qquad \text{但参数 }2\cdot3^2\cdot C^2 &lt; 5^2\cdot C^2 $$
+      </div>
+
+      <h3 class="topic" id="s3-2">3.2 ResNet 与 Inception</h3>
+
+      <h4>ResNet · 残差网络</h4>
+      <p>网络太深反而<strong>退化</strong>（训练误差也上升，非过拟合）。ResNet 引入<strong>残差块</strong>，学习残差而非直接映射：</p>
+      <div class="formula"><div class="flabel">残差块：跳跃连接（shortcut / skip）</div>
+      $$ y = \mathcal F(x, W) + x $$
+      </div>
+      <p>恒等映射（短路径）让梯度能顺畅回传，从而训练上百层（ResNet-50/101/152）。<span class="inline-katex">$x$</span> 与 <span class="inline-katex">$\mathcal F$</span> 维度不同时用 1×1 卷积投影对齐。</p>
+
+      <h4>Inception（GoogLeNet）</h4>
+      <p>在同一层用<strong>多个尺度的卷积并行</strong>（1×1、3×3、5×5、池化），拼接后输出，让网络自适应选择尺度。关键技巧是<strong>先用 1×1 卷积降通道</strong>，控制计算量（瓶颈）。</p>
+      <div class="formula"><div class="flabel">Inception 模块（多分支）</div>
+      $$ \text{输出}=\text{Concat}\big[\text{Conv}_{1\times1},\;\text{Conv}_{3\times3},\;\text{Conv}_{5\times5},\;\text{Pool}\big] $$
+      </div>
+      <p class="muted">1×1 卷积在这里作用是"降维 + 通道间信息融合"，一举两得。后续 Inception v2/v3 用小核分解、BatchNorm 等进一步优化。</p>
+
+      <h3 class="topic" id="s3-3">3.3 MobileNet 与 DenseNet</h3>
+
+      <h4>MobileNet · 深度可分离卷积</h4>
+      <p>为移动端设计，核心是把标准卷积拆成两步：<strong>深度卷积</strong>（每个通道单独卷积）+ <strong>逐点卷积</strong>（1×1 融合通道）。计算量约降至 1/9，参数量也大幅减少。</p>
+      <div class="formula"><div class="flabel">深度可分离卷积分解</div>
+      $$ \text{标准}:\, C_{\text{in}}\cdot k^2\cdot C_{\text{out}} \;\Longrightarrow\; \underbrace{C_{\text{in}}\cdot k^2}_{\text{深度}}+\underbrace{C_{\text{in}}\cdot C_{\text{out}}}_{\text{逐点 }1\times 1} $$
+      </div>
+
+      <h4>DenseNet · 密集连接</h4>
+      <p>每一层与<strong>之前所有层</strong>直接相连，特征被反复复用，缓解梯度消失、减少参数（只保留增长的小块"growth rate"新特征）。</p>
+
+      <h3 class="topic" id="s3-4">3.4 神经架构搜索 与 胶囊网络</h3>
+
+      <h4>神经架构搜索（NAS）</h4>
+      <p>把<strong>网络结构</strong>也当成可搜索的对象：用算法（强化学习 / 进化 / 可微分搜索）自动找最优的层组合，替代人工设计。代表作如 EfficientNet 等。</p>
+
+      <h4>胶囊网络（Capsule Network）</h4>
+      <p>针对 CNN 的局限：池化丢失<strong>空间位置与姿态</strong>信息。胶囊网络把"神经元"升级为<strong>胶囊</strong>（一组神经元的向量，编码实体的属性+存在概率），用<strong>动态路由</strong>让高层胶囊从低层胶囊中提取信息，对平移/旋转更鲁棒。</p>
+      <div class="callout warn"><div class="co-t">易混淆点</div>卷积池化虽然增强了平移不变性，但也丢弃了位置细节；胶囊网络试图在保留位置关系的同时做识别——这是它区别于 CNN 的本质。</div>
+
+      <h3 class="topic" id="s3-ex">例题 3</h3>
+
+      <div class="example">
+        <div class="ex-head">例题 3A · 深度可分离卷积参数量</div>
+        <div class="ex-body">
+          <p><span class="hint">输入 64 通道，用 3×3 卷积，输出 128 通道。分别求：① 标准卷积参数量；② 深度可分离卷积参数量（均不含偏置）。</span></p>
+        </div>
+        <details class="solution"><summary>查看详解</summary><div class="sol-body">
+          <p><strong>① 标准卷积</strong>：</p>
+          <div class="formula">$$ 64\times3\times3\times128=73{,}728 $$
+          </div>
+          <p><strong>② 深度可分离</strong>：深度卷积 <span class="inline-katex">$64\times3\times3=576$</span> + 逐点卷积 <span class="inline-katex">$64\times1\times1\times128=8192$</span>：</p>
+          <div class="formula">$$ 576+8{,}192=8{,}768 $$
+          </div>
+          <p><span class="answer-tag">答案：标准 73,728；深度可分离 8,768（约为前者的 1/8.4）</span></p>
+          <p class="muted2">这正是 MobileNet 省参数的原理——把 C<sub>in</sub>×C<sub>out</sub> 的耦合拆开。</p>
+        </div></details>
+      </div>
+
+      <div class="example">
+        <div class="ex-head">例题 3B · 残差块理解</div>
+        <div class="ex-body">
+          <p><span class="hint">残差块输出 <span class="inline-katex">$y=\mathcal F(x)+x$</span>。若把网络堆到 100+ 层，ResNet 靠什么让梯度不回消失？</span></p>
+        </div>
+        <details class="solution"><summary>查看详解</summary><div class="sol-body">
+          <p>靠<strong>恒等短路径（跳跃连接）</strong>。反向传播时，梯度除了经主干 <span class="inline-katex">$\mathcal F$</span> 连乘传播，还能经 <span class="inline-katex">$x$</span> 这条"直达"路径近乎无损地传回，避免深层的梯度连乘指数衰减。</p>
+          <p><span class="answer-tag">答案：跳跃连接的恒等路径让梯度可直达浅层，缓解梯度消失/退化。</span></p>
+          <p class="muted2">直觉：网络至少能退化成浅层效果（令 <span class="inline-katex">$\mathcal F\to0$</span>），所以加深不"亏"。</p>
+        </div></details>
+      </div>
+    </section>
+
+    <!-- ===== 第 4 章 ===== -->
+    <section class="chapter" id="ch4">
+      <div class="chapter-head">
+        <span class="chapter-num">Chapter 04</span>
+        <h2>对象检测与图像分割</h2>
+        <span class="scope">第二部分 · 计算机视觉</span>
+      </div>
+
+      <div class="summary-box"><div class="sb-t">本章主线</div>
+        从"分类整张图"走向"定位图中物体"：对象检测（<strong>YOLO v3</strong>、<strong>Faster R-CNN</strong>）与图像分割（<strong>U-Net</strong>、<strong>Mask R-CNN</strong>）。先吃透<strong>IoU、锚框、两阶段 vs 单阶段</strong>这些概念。</div>
+
+      <h3 class="topic" id="s4-1">4.1 对象检测基础</h3>
+      <p>对象检测 = <strong>定位</strong>（输出边界框，通常 <span class="inline-katex">$(x,y,w,h)$</span>）+ <strong>分类</strong>（框中是什么）。两大流派：</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th style="width:16%">流派</th><th style="width:44%">做法</th><th>代表 · 特点</th></tr></thead>
+        <tbody>
+          <tr><td><b>两阶段</b></td><td>先提候选框（Region Proposal），再对每个框分类+精修</td><td>Faster R-CNN 等，准但慢</td></tr>
+          <tr><td><b>单阶段</b></td><td>一步直接预测框 + 类别</td><td>YOLO、SSD 等，快但略逊</td></tr>
+        </tbody>
+      </table></div>
+
+      <h4>IoU（交并比）</h4>
+      <p>衡量两个框的重合程度，用于判断检测是否正确、非极大值抑制（NMS）等：</p>
+      <div class="formula"><div class="flabel">IoU = 交集 / 并集</div>
+      $$ \mathrm{IoU}=\frac{\text{两框交集面积}}{\text{两框并集面积}}\in[0,1] $$
+      </div>
+      <p>通常 IoU &gt; 0.5 视为预测到该物体。</p>
+
+      <div class="interact" id="iou-play">
+        <div class="i-title">交互 4.1 · IoU 计算器</div>
+        <div class="i-desc">输入两个矩形框（x1,y1,x2,y2），实时计算交并比。</div>
+        <div class="slider-row"><label>框 A</label><input type="number" id="a-x1" value="2"><span class="muted2">,</span><input type="number" id="a-y1" value="2"><span class="muted2">,</span><input type="number" id="a-x2" value="6"><span class="muted2">,</span><input type="number" id="a-y2" value="6"></div>
+        <div class="slider-row"><label>框 B</label><input type="number" id="b-x1" value="4"><span class="muted2">,</span><input type="number" id="b-y1" value="3"><span class="muted2">,</span><input type="number" id="b-x2" value="8"><span class="muted2">,</span><input type="number" id="b-y2" value="7"></div>
+        <button class="btn" id="iou-calc">计算 IoU</button>
+        <div class="result-box" id="iou-res" style="display:none">交集 = <span id="iou-in" class="big"></span> · 并集 = <span id="iou-un" class="big"></span><br>IoU = <span id="iou-v" class="big"></span></div>
+      </div>
+
+      <h3 class="topic" id="s4-2">4.2 YOLO v3（单阶段）</h3>
+      <p>YOLO（You Only Look Once）把检测当作<strong>一次回归</strong>：把图分成 <span class="inline-katex">$S\times S$</span> 网格，每个格子负责预测若干<strong>边界框 + 置信度 + 类别概率</strong>，一次前向就出所有结果。</p>
+      <ul>
+        <li><strong>网格 + 锚框</strong>：每格预测 k 个带预设宽高比的锚框。</li>
+        <li><strong>多尺度检测</strong>：在不同分辨率的特征图上检测大中小物体。</li>
+        <li><strong>特点</strong>：速度极快，适合实时场景。</li>
+      </ul>
+
+      <h3 class="topic" id="s4-3">4.3 Faster R-CNN（两阶段）</h3>
+      <p>改进 R-CNN / Fast R-CNN，让<strong>区域提议也由网络自己产生</strong>：</p>
+      <div class="formula"><div class="flabel">Faster R-CNN 流程</div>
+      $$ \text{卷积骨干}\;\xrightarrow{\text{RPN 区域提议网络}}\;\text{候选框}\;\xrightarrow{\text{ROI Pooling}}\;\text{统一尺寸}\;\xrightarrow{\text{分类 + 边框回归}} $$
+      </div>
+      <ul>
+        <li><strong>RPN</strong>：在特征图上用锚框预测"是不是前景"并粗调框。</li>
+        <li><strong>ROI Pooling</strong>：把大小不一的候选框区域统一成固定尺寸再分类。</li>
+      </ul>
+      <div class="callout info"><div class="co-t">对比记忆</div>YOLO 快、Faster R-CNN 准；两阶段"先框后判"，单阶段"一步到位"。</div>
+
+      <h3 class="topic" id="s4-4">4.4 图像分割</h3>
+      <h4>语义分割 · U-Net</h4>
+      <p>把每个<strong>像素</strong>分类（如哪些是血管、哪些是背景）。U-Net 用<strong>编码器-解码器</strong>结构：编码器逐层下采样提语义，解码器上采样恢复分辨率；关键是<strong>跳跃连接</strong>把浅层高分辨率细节与深层语义融合，适合小数据集医学图像。</p>
+      <div class="formula"><div class="flabel">U 型：编码（压缩）→ 解码（恢复） + 跳跃连接</div>
+      $$ \text{收缩路径}\xrightarrow{\text{下采样}}\text{瓶颈}\xrightarrow{\text{上采样}}\text{扩张路径}\;\text{（与对应层 concat）} $$
+      </div>
+
+      <h4>实例分割 · Mask R-CNN</h4>
+      <p>不仅要区分像素类别，还要<strong>区分每个个体</strong>。Mask R-CNN 在 Faster R-CNN 基础上加一个<strong>分割分支</strong>，为每个候选框输出一个像素级掩码；用 <strong>ROI Align</strong>（双线性插值）替代 ROI Pooling 消除量化误差。</p>
+
+      <h3 class="topic" id="s4-ex">例题 4</h3>
+
+      <div class="example">
+        <div class="ex-head">例题 4A · 计算 IoU</div>
+        <div class="ex-body">
+          <p><span class="hint">框 A：<span class="inline-katex">$(1,1,5,5)$</span>；框 B：<span class="inline-katex">$(3,3,7,7)$</span>（格式 x1,y1,x2,y2）。求 IoU。</span></p>
+        </div>
+        <details class="solution"><summary>查看详解</summary><div class="sol-body">
+          <p><strong>两框面积</strong>：A 边长 4 → 16；B 边长 4 → 16。</p>
+          <p><strong>交集</strong>：x 方向重叠 <span class="inline-katex">$5-3=2$</span>，y 方向重叠 <span class="inline-katex">$5-3=2$</span>，面积 <span class="inline-katex">$2\times2=4$</span>。</p>
+          <p><strong>并集</strong>：<span class="inline-katex">$16+16-4=28$</span></p>
+          <div class="formula">$$ \mathrm{IoU}=\frac{4}{28}=\frac17\approx0.143 $$
+          </div>
+          <p><span class="answer-tag">答案：IoU = 4/28 ≈ 0.143</span></p>
+          <p class="muted2">交集坐标：两框左上的最大值为交集左上，右下的最小值为交集右下；交集宽高 <span class="inline-katex">$=\max(0,\min(x_2)-\max(x_1))$</span>。</p>
+        </div></details>
+      </div>
+
+      <div class="example">
+        <div class="ex-head">例题 4B · 概念辨析</div>
+        <div class="ex-body">
+          <p><span class="hint">语义分割与实例分割的关键区别？U-Net 与 Faster R-CNN 各擅长什么任务？</span></p>
+        </div>
+        <details class="solution"><summary>查看详解</summary><div class="sol-body">
+          <p><strong>语义分割</strong>：按类别分像素，不区分同类的不同个体（所有"人"都标成同一类）。<strong>实例分割</strong>：区分每个个体（人1、人2各自独立掩码）。</p>
+          <p><strong>U-Net</strong> 做像素级分割，输入整图输出同尺寸掩码；<strong>Faster R-CNN</strong> 做对象检测，输出边界框 + 类别。二者解决不同问题：分割 vs 检测。</p>
+          <p><span class="answer-tag">答案：见上方两行。</span></p>
+        </div></details>
+      </div>
+    </section>
+
+    <!-- ===== 综合自测 ===== -->
+    <section class="chapter" id="quiz">
+      <div class="chapter-head">
+        <span class="chapter-num">Self-Test</span>
+        <h2>综合自测</h2>
+        <span class="scope">每章 2 题 · 点击选项即时判分</span>
+      </div>
+      <p class="muted">共 8 题，点击你的答案立即看到对错与解释，考前快速自查。</p>
+
+      <div class="quiz-grid">
+        <div class="interact" data-q="1"><div class="i-title">Q1 · 反向传播</div>
+          <div class="i-desc">反向传播计算梯度的数学依据是？</div>
+          <button class="btn ghost" data-opt="a">A. 链式法则</button>&nbsp;
+          <button class="btn ghost" data-opt="b">B. 大数定律</button>&nbsp;
+          <button class="btn ghost" data-opt="c">C. 贝叶斯定理</button>
+          <div class="fdb" data-ans="a"><b>✔ 正确</b> 反向传播 = 链式法则的高效逐层累积。</div>
+          <div class="fdb" data-ans="b">✘ 不对。答案是 A 链式法则。</div>
+          <div class="fdb" data-ans="c">✘ 不对。贝叶斯是概率推断用的。答案是 A。</div>
+        </div>
+
+        <div class="interact" data-q="2"><div class="i-title">Q2 · 初始化</div>
+          <div class="i-desc">为 ReLU 隐藏层设计的初始化是？</div>
+          <button class="btn ghost" data-opt="a">A. He 初始化</button>&nbsp;
+          <button class="btn ghost" data-opt="b">B. 全零初始化</button>&nbsp;
+          <button class="btn ghost" data-opt="c">C. 全 1 初始化</button>
+          <div class="fdb" data-ans="a"><b>✔ 正确</b> He 用 2/n<sub>in</sub> 方差，补偿 ReLU 置零的梯度。</div>
+          <div class="fdb" data-ans="b">✘ 不对。全零会让所有神经元对称、无法学习。答案是 A。</div>
+          <div class="fdb" data-ans="c">✘ 不对。全 1 会饱和。答案是 A。</div>
+        </div>
+
+        <div class="interact" data-q="3"><div class="i-title">Q3 · 卷积类型</div>
+          <div class="i-desc">不增加参数却扩大感受野的卷积是？</div>
+          <button class="btn ghost" data-opt="a">A. 扩张卷积</button>&nbsp;
+          <button class="btn ghost" data-opt="b">B. 1×1 卷积</button>&nbsp;
+          <button class="btn ghost" data-opt="c">C. 转置卷积</button>
+          <div class="fdb" data-ans="a"><b>✔ 正确</b> 扩张卷积在核间插洞，感受野扩大、参数不变。</div>
+          <div class="fdb" data-ans="b">✘ 不对。1×1 是改通道数。答案是 A。</div>
+          <div class="fdb" data-ans="c">✘ 不对。转置卷积是上采样。答案是 A。</div>
+        </div>
+
+        <div class="interact" data-q="4"><div class="i-title">Q4 · 迁移学习</div>
+          <div class="i-desc">数据很少、任务相近时，通常采用？</div>
+          <button class="btn ghost" data-opt="a">A. 特征提取（冻结骨干）</button>&nbsp;
+          <button class="btn ghost" data-opt="b">B. 全部随机初始化</button>&nbsp;
+          <button class="btn ghost" data-opt="c">C. 从头训练大模型</button>
+          <div class="fdb" data-ans="a"><b>✔ 正确</b> 冻结预训练权重、只训练分类头最稳。</div>
+          <div class="fdb" data-ans="b">✘ 不对。那样数据太少易过拟合。答案是 A。</div>
+          <div class="fdb" data-ans="c">✘ 不对。小数据训大模型不现实。答案是 A。</div>
+        </div>
+
+        <div class="interact" data-q="5"><div class="i-title">Q5 · ResNet</div>
+          <div class="i-desc">ResNet 解决深层网络退化问题的关键机制？</div>
+          <button class="btn ghost" data-opt="a">A. 跳跃连接（残差）</button>&nbsp;
+          <button class="btn ghost" data-opt="b">B. 增大学习率</button>&nbsp;
+          <button class="btn ghost" data-opt="c">C. 去掉激活函数</button>
+          <div class="fdb" data-ans="a"><b>✔ 正确</b> 恒等短路径让梯度可直达浅层。</div>
+          <div class="fdb" data-ans="b">✘ 不对。学习率不解决退化。答案是 A。</div>
+          <div class="fdb" data-ans="c">✘ 不对。去掉激活会失去非线性。答案是 A。</div>
+        </div>
+
+        <div class="interact" data-q="6"><div class="i-title">Q6 · MobileNet</div>
+          <div class="i-desc">MobileNet 大幅省参数依靠？</div>
+          <button class="btn ghost" data-opt="a">A. 深度可分离卷积</button>&nbsp;
+          <button class="btn ghost" data-opt="b">B. 全连接层</button>&nbsp;
+          <button class="btn ghost" data-opt="c">C. 增大卷积核</button>
+          <div class="fdb" data-ans="a"><b>✔ 正确</b> 深度卷积 + 1×1 逐点卷积拆分标准卷积。</div>
+          <div class="fdb" data-ans="b">✘ 不对。全连接参数更多。答案是 A。</div>
+          <div class="fdb" data-ans="c">✘ 不对。增大核反而加参数。答案是 A。</div>
+        </div>
+
+        <div class="interact" data-q="7"><div class="i-title">Q7 · 检测</div>
+          <div class="i-desc">YOLO 属于哪种检测范式？</div>
+          <button class="btn ghost" data-opt="a">A. 单阶段</button>&nbsp;
+          <button class="btn ghost" data-opt="b">B. 两阶段</button>&nbsp;
+          <button class="btn ghost" data-opt="c">C. 逐像素分割</button>
+          <div class="fdb" data-ans="a"><b>✔ 正确</b> YOLO 一次前向直接出框 + 类，主打速度。</div>
+          <div class="fdb" data-ans="b">✘ 不对。两阶段是 Faster R-CNN。答案是 A。</div>
+          <div class="fdb" data-ans="c">✘ 不对。那属于分割。答案是 A。</div>
+        </div>
+
+        <div class="interact" data-q="8"><div class="i-title">Q8 · 分割</div>
+          <div class="i-desc">既要像素级又要区分每个个体，属于？</div>
+          <button class="btn ghost" data-opt="a">A. 实例分割</button>&nbsp;
+          <button class="btn ghost" data-opt="b">B. 语义分割</button>&nbsp;
+          <button class="btn ghost" data-opt="c">C. 目标分类</button>
+          <div class="fdb" data-ans="a"><b>✔ 正确</b> Mask R-CNN 就是做实例分割。</div>
+          <div class="fdb" data-ans="b">✘ 不对。语义分割不区分个体。答案是 A。</div>
+          <div class="fdb" data-ans="c">✘ 不对。分类不产生像素掩码。答案是 A。</div>
+        </div>
+      </div>
+
+      <div class="callout info"><div class="co-t">复习建议</div>
+        先闭卷答例题再展开对照；公式（参数量、输出尺寸、IoU、梯度更新）默写三遍；把激活函数曲线、参数量计算器、IoU 计算器各点一遍再回来自测。</div>
+    </section>
+
+  </main>
+</nav>
+
+<script src="https://fastly.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script>
+/* KaTeX 自动渲染 */
+(function(){
+  var s=document.createElement('script');
+  s.src="https://fastly.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js";
+  s.onload=function(){
+    var ar=document.createElement('script');
+    ar.src="https://fastly.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js";
+    ar.onload=function(){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});};
+    document.body.appendChild(ar);
+  };
+  document.body.appendChild(s);
+})();
+</script>
+
+<script>
+/* hero 神经网络脉冲动画 */
+(function(){
+  var cv=document.getElementById('nncanvas');if(!cv)return;
+  var ctx=cv.getContext('2d'),W,H,nodes=[],pulse=[];
+  function init(){W=cv.width=cv.offsetWidth*devicePixelRatio;H=cv.height=cv.offsetHeight*devicePixelRatio;
+    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    nodes=[];for(var i=0;i<16;i++){nodes.push({x:0.05+Math.random()*0.9,y:0.1+Math.random()*0.85});}}
+  function spawn(){pulse.push({s:nodes[Math.floor(Math.random()*nodes.length)],t:nodes[Math.floor(Math.random()*nodes.length)],p:0});}
+  setInterval(spawn,900);
+  function frame(){
+    ctx.clearRect(0,0,cv.offsetWidth,cv.offsetHeight);
+    for(var i=0;i<nodes.length;i++){var n=nodes[i];
+      n.x+=Math.sin((Date.now()+i)*0.0007)*0.0015;n.y+=Math.cos((Date.now()+i)*0.0005)*0.0015;
+      var X=n.x*cv.offsetWidth,Y=n.y*cv.offsetHeight;
+      ctx.beginPath();ctx.arc(X,Y,2.4,0,6.283);ctx.fillStyle='rgba(94,234,212,0.55)';ctx.fill();}
+    for(var i=pulse.length-1;i>=0;i--){var p=pulse[i];p.p+=0.012;
+      if(p.p>1){pulse.splice(i,1);continue;}
+      var x1=p.s.x*cv.offsetWidth,y1=p.s.y*cv.offsetHeight,x2=p.t.x*cv.offsetWidth,y2=p.t.y*cv.offsetHeight;
+      var x=x1+(x2-x1)*p.p,y=y1+(y2-y1)*p.p;
+      ctx.beginPath();ctx.arc(x,y,2.8*(1-p.p)+0.8,0,6.283);ctx.fillStyle='rgba(167,139,250,0.85)';ctx.fill();}
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener('resize',init);init();requestAnimationFrame(frame);
+})();
+/* 目录高亮 */
+(function(){
+  var links=document.querySelectorAll('.sidebar a[href^="#"]');
+  var secs=[];links.forEach(function(a){var el=document.querySelector(a.getAttribute('href'));if(el)secs.push({a:a,el:el});});
+  function onScroll(){var y=window.scrollY+90,cur=null;
+    for(var i=0;i<secs.length;i++){if(secs[i].el.offsetTop<=y)cur=secs[i];}
+    if(!cur&&secs.length)cur=secs[0];
+    secs.forEach(function(s){s.a.classList.toggle('active',s===cur);});}
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+})();
+document.getElementById('btn-top').addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+
+<script>
+/* 交互 1.1 · 激活函数曲线 */
+(function(){
+  var el=document.getElementById('act-chart');if(!el||typeof echarts==='undefined')return;
+  var chart=echarts.init(el);
+  var x=[];for(var xx=-5;xx<=5.001;xx+=0.05)x.push(+xx.toFixed(2));
+  var LIB={sigmoid:function(v){return 1/(1+Math.exp(-v));},tanh:function(v){return Math.tanh(v);},relu:function(v){return v>0?v:0;},leaky:function(v){return v>0?v:0.1*v;}};
+  var COLOR={sigmoid:'#5eead4',tanh:'#a78bfa',relu:'#fbbf24',leaky:'#fb7185'};
+  var NOTE={sigmoid:'Sigmoid：输出(0,1)，两端梯度≈0（易梯度消失）。',tanh:'Tanh：输出(-1,1)，零中心，仍有饱和区。',relu:'ReLU：正区梯度恒1，负区梯度0；隐藏层默认。',leaky:'Leaky ReLU：负区保留0.1斜率，避免“ReLU 死亡”。'};
+  function render(name){
+    var f=LIB[name],data=x.map(function(v){return [v,+f(v).toFixed(4)];});
+    chart.setOption({animationDuration:280,grid:{left:46,right:18,top:26,bottom:30},
+      xAxis:{type:'value',min:-5,max:5,axisLabel:{color:'#74809e'},splitLine:{lineStyle:{color:'#182238'}},axisLine:{lineStyle:{color:'#2c3c5c'}}},
+      yAxis:{type:'value',axisLabel:{color:'#74809e'},splitLine:{lineStyle:{color:'#182238'}},axisLine:{lineStyle:{color:'#2c3c5c'}}},
+      series:[{type:'line',data:data,smooth:true,symbol:'none',lineStyle:{width:2.5,color:COLOR[name]},areaStyle:{opacity:0.10,color:COLOR[name]}}]},true);
+    var note=document.getElementById('act-note');if(note)note.textContent=NOTE[name];
+  }
+  var btns=document.querySelectorAll('[data-act]');
+  function setActive(act){btns.forEach(function(b){var v=b.getAttribute('data-act');b.classList.toggle('_act',v===act);b.classList.toggle('ghost',v!==act);});}
+  btns.forEach(function(b){b.addEventListener('click',function(){var v=b.getAttribute('data-act');render(v);setActive(v);});});
+  render('sigmoid');setActive('sigmoid');
+})();
+</script>
+
+<script>
+/* 交互 2.1 · 卷积参数量计算器 */
+(function(){
+  var cin=document.getElementById('c-cin'),k=document.getElementById('c-k'),cout=document.getElementById('c-cout');
+  var box=document.getElementById('conv-res'),no=document.getElementById('c-no'),yes=document.getElementById('c-yes');
+  function calc(){
+    var ci=Math.max(1,+cin.value||1),kk=Math.max(1,+k.value||1),co=Math.max(1,+cout.value||1);
+    var p=ci*kk*kk*co;
+    no.textContent=p.toLocaleString();
+    yes.textContent=(p+co).toLocaleString();
+    box.style.display='block';
+  }
+  cin.addEventListener('input',calc);k.addEventListener('input',calc);cout.addEventListener('input',calc);
+  calc();
+})();
+</script>
+
+<script>
+/* 交互 4.1 · IoU 计算器 */
+(function(){
+  var btn=document.getElementById('iou-calc');
+  btn.addEventListener('click',function(){
+    function g(id){return +document.getElementById(id).value||0;}
+    var ax1=g('a-x1'),ay1=g('a-y1'),ax2=g('a-x2'),ay2=g('a-y2');
+    var bx1=g('b-x1'),by1=g('b-y1'),bx2=g('b-x2'),by2=g('b-y2');
+    var ix1=Math.max(ax1,bx1),iy1=Math.max(ay1,by1),ix2=Math.min(ax2,bx2),iy2=Math.min(ay2,by2);
+    var iw=Math.max(0,ix2-ix1),ih=Math.max(0,iy2-iy1);
+    var inter=iw*ih;
+    var areaA=(ax2-ax1)*(ay2-ay1),areaB=(bx2-bx1)*(by2-by1);
+    var uni=areaA+areaB-inter;
+    document.getElementById('iou-in').textContent=inter;
+    document.getElementById('iou-un').textContent=uni;
+    var v=document.getElementById('iou-v');
+    if(uni<=0){v.textContent='—（框无效）';v.style.color='var(--rd)';}
+    else{var r=inter/uni;v.textContent=r.toFixed(4)+'  ('+(r*100).toFixed(2)+'%)';v.style.color='var(--cy)';}
+    document.getElementById('iou-res').style.display='block';
+  });
+})();
+</script>
+
+<script>
+/* 综合自测：点击选项即时判分 */
+(function(){
+  var items=document.querySelectorAll('.quiz-grid [data-q]');
+  items.forEach(function(it){
+    var btns=it.querySelectorAll('[data-opt]');
+    var fdbs={};
+    it.querySelectorAll('.fdb').forEach(function(f){var a=f.getAttribute('data-ans');if(a)fdbs[a]=f;});
+    btns.forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var opt=btn.getAttribute('data-opt');
+        it.querySelectorAll('.fdb').forEach(function(f){f.classList.remove('ok','bad');});
+        btns.forEach(function(b){b.classList.remove('_act');b.classList.add('ghost');});
+        btn.classList.add('_act');btn.classList.remove('ghost');
+        var fdb=fdbs[opt];
+        if(fdb){
+          if(fdb.textContent.indexOf('✔')>=0)fdb.classList.add('ok');
+          else fdb.classList.add('bad');
+        }
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
